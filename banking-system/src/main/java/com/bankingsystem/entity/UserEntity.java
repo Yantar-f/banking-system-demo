@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -65,11 +66,16 @@ public class UserEntity {
     @Column(name = "birthdate")
     private LocalDate birthdate;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private Set<EmailEntity> emails;
+    @NotNull
+    @NotBlank
+    @Column(name = "password")
+    private String encodedPassword;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
-    private Set<PhoneNumberEntity> phoneNumbers;
+    private Set<EmailEntity> emails = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST)
+    private Set<PhoneNumberEntity> phoneNumbers = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.PERSIST)
     private AccountEntity account;
@@ -83,23 +89,17 @@ public class UserEntity {
 
     protected UserEntity() {}
 
-    public UserEntity(Long id,
-                      String name,
+    public UserEntity(String name,
                       String surname,
                       String patronymic,
                       LocalDate birthdate,
-                      Set<EmailEntity> emails,
-                      Set<PhoneNumberEntity> phoneNumbers,
-                      AccountEntity account) {
+                      String encodedPassword) {
 
-        this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
         this.birthdate = birthdate;
-        this.emails = emails;
-        this.phoneNumbers = phoneNumbers;
-        this.account = account;
+        this.encodedPassword = encodedPassword;
     }
 
     public Long getId() {
@@ -142,6 +142,14 @@ public class UserEntity {
         this.birthdate = birthdate;
     }
 
+    public String getEncodedPassword() {
+        return encodedPassword;
+    }
+
+    public void setEncodedPassword(String encodedPassword) {
+        this.encodedPassword = encodedPassword;
+    }
+
     public Set<EmailEntity> getEmails() {
         return emails;
     }
@@ -150,12 +158,20 @@ public class UserEntity {
         this.emails = emails;
     }
 
+    public void addEmail(EmailEntity email) {
+        emails.add(email);
+    }
+
     public Set<PhoneNumberEntity> getPhoneNumbers() {
         return phoneNumbers;
     }
 
     public void setPhoneNumbers(Set<PhoneNumberEntity> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
+    }
+
+    public void addPhoneNumber(PhoneNumberEntity phoneNumber) {
+        phoneNumbers.add(phoneNumber);
     }
 
     public AccountEntity getAccount() {
