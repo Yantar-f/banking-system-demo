@@ -21,17 +21,18 @@ public class PhoneNumberEntity {
     @Column(name = "phone_number_id")
     private Long id;
 
+    @NotNull
     @Column(name = "number")
     private String number;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NotNull
     private UserEntity user;
 
     protected PhoneNumberEntity() {}
 
-    public PhoneNumberEntity(String number, UserEntity user) {
+    public PhoneNumberEntity(String number, @NotNull UserEntity user) {
         this.number = number;
         this.user = user;
     }

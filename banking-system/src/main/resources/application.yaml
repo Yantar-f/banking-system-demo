@@ -1,0 +1,54 @@
+server:
+    port: 8080
+    error:
+        include-message: always
+        include-binding-errors: always
+        include-stacktrace: never
+spring:
+    output:
+        ansi:
+            enabled: always
+    main:
+        banner-mode: off
+    datasource:
+        url: jdbc:postgresql://banking-system-database:5432/BankDemoDB
+        username: postgres
+        password: 123
+    jpa:
+        database: postgresql
+        open-in-view: false
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:
+            hibernate:
+                format_sql: true
+            jakarta:
+                persistence:
+                    sharedCache:
+                        mode: ENABLE_SELECTIVE
+    cassandra:
+        contact-points: banking-system-sessions-db:9042
+        local-datacenter: datacenter1
+        keyspace-name: sessionkeyspace
+        schema-action: create_if_not_exists
+app:
+    security:
+        access-token:
+            issuer: demo-iss
+            activation-ms: 0
+            expiration-ms: 60000
+            allowed-clock-skew-s: 5
+            cookie-name: demo-a-t
+            cookie-path: /
+            cookie-expiration-s: 65
+            secret-key: 301RJdFDpzEchd3y+4O7GUl3Ade2PNyyDtUx76AdPWpe0uYUW47MON9jtEUOmod9
+        refresh-token:
+            issuer: demo-iss
+            activation-ms: 0
+            expiration-ms: 3600000
+            allowed-clock-skew-s: 5
+            cookie-name: demo-r-t
+            cookie-path: /
+            cookie-expiration-s: 3605
+            secret-key: 301RJdFDpzEchd3y+4O7GUl3Ade2PNyyDtUx76AdPWpe0uYUW47MON9jtEUOmod9

@@ -22,6 +22,7 @@ public class EmailEntity {
     @Column(name = "email_id")
     private Long id;
 
+    @NotNull
     @Column(name = "address")
     private String address;
 

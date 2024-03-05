@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+    banking-system-database:
+        container_name: banking-system-database-container
+        image: postgres:15-alpine
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_DB: BankDemoDB
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: 123
+    banking-system-sessions-db:
+        container_name: banking-system-sessions-db-container
+        image: cassandra
+        ports:
+            - "9042:9042"
+    banking-system:
+        container_name: banking-system-container
+        build: ./banking-system
+        ports:
+            - "8080:8080"
+        depends_on:
+            - banking-system-database
+        restart: unless-stopped
