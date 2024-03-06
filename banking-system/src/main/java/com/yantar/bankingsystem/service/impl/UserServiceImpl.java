@@ -8,6 +8,7 @@ import com.yantar.bankingsystem.entity.RoleEntity;
 import com.yantar.bankingsystem.entity.UserEntity;
 import com.yantar.bankingsystem.exception.ContactInfoNotProvidedException;
 import com.yantar.bankingsystem.exception.EmailOccupiedException;
+import com.yantar.bankingsystem.exception.LastContactInfoRemainingException;
 import com.yantar.bankingsystem.exception.PhoneNumberOccupiedException;
 import com.yantar.bankingsystem.exception.UserNotFoundException;
 import com.yantar.bankingsystem.model.UserCreationData;
@@ -77,6 +78,58 @@ public class UserServiceImpl implements UserService {
         UserEntity newUser = constructUserFrom(creationData);
 
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public EmailEntity addEmail(String address, Long userId) {
+        if (isEmailExists(address))
+            throw new EmailOccupiedException(address);
+
+        EmailEntity email = new EmailEntity(address, UserEntity.asReference(userId));
+
+        return emailRepository.save(email);
+    }
+
+    private boolean isEmailExists(String address) {
+        return emailRepository.existsByAddress(address);
+    }
+
+    @Override
+    public PhoneNumberEntity addPhoneNumber(String number, Long userId) {
+        if (isPhoneNumberExists(number))
+            throw new PhoneNumberOccupiedException(number);
+
+        PhoneNumberEntity phoneNumber = new PhoneNumberEntity(number, UserEntity.asReference(userId));
+
+        return phoneNumberRepository.save(phoneNumber);
+    }
+
+    @Override
+    public void deleteEmail(String address, Long userId) {
+        if (isOneContactInfoRemaining(userId))
+            throw new LastContactInfoRemainingException();
+
+        emailRepository.deleteByAddressAndUser_Id(address, userId);
+    }
+
+    @Override
+    public void deleteNumber(String number, Long userId) {
+        if (isOneContactInfoRemaining(userId))
+            throw new LastContactInfoRemainingException();
+
+        phoneNumberRepository.deleteByNumberAndUser_Id(number, userId);
+    }
+
+    private boolean isOneContactInfoRemaining(Long userId) {
+        return contactInfoCountFor(userId) > 1;
+    }
+
+    private int contactInfoCountFor(Long userId) {
+        return emailRepository.countByUser_Id(userId) + phoneNumberRepository.countByUser_Id(userId);
+    }
+
+    private boolean isPhoneNumberExists(String number) {
+        return phoneNumberRepository.existsByNumber(number);
     }
 
     private void checkContactInfoUniqueness(UserCreationData creationData) {

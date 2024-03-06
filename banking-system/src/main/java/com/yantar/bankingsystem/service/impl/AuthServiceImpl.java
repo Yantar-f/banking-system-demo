@@ -44,6 +44,7 @@ public class AuthServiceImpl implements AuthService {
                            TokenIdGenerator tokenIdGenerator,
                            TokenUtil tokenUtil,
                            Clock clock) {
+
         this.userRepository = userRepository;
         this.userSpecBuilder = userSpecBuilder;
         this.sessionRepository = sessionRepository;
@@ -61,28 +62,6 @@ public class AuthServiceImpl implements AuthService {
         validatePasswords(loginCredentials.password(), user.getEncodedPassword());
 
         return generateSessionFor(user);
-    }
-
-    private SessionEntity generateSessionFor(UserEntity user) {
-        SessionId sessionId = generateSessionID(user.getId());
-        String tokenId = generateTokenID();
-        String convertedSessionId = convertSessionID(sessionId);
-
-        TokenClaims tokenClaims = new TokenClaims(user.getId(), convertedSessionId, tokenId);
-
-        String accessToken = generateAccessTokenFrom(tokenClaims);
-        String refreshToken = generateRefreshTokenFrom(tokenClaims);
-        Instant createdAt = stampTime();
-
-        return sessionRepository.insert(new SessionEntity(
-                user.getId(),
-                sessionId.getSessionKey(),
-                createdAt,
-                user.getRoles().stream().map(RoleEntity::getDesignation).collect(Collectors.toSet()),
-                accessToken,
-                refreshToken,
-                tokenId
-        ));
     }
 
     @Override
@@ -128,6 +107,28 @@ public class AuthServiceImpl implements AuthService {
         } catch (InvalidSessionIdException exception) {
             throw new InvalidTokenException(refreshToken);
         }
+    }
+
+    private SessionEntity generateSessionFor(UserEntity user) {
+        SessionId sessionId = generateSessionID(user.getId());
+        String tokenId = generateTokenID();
+        String convertedSessionId = convertSessionID(sessionId);
+
+        TokenClaims tokenClaims = new TokenClaims(user.getId(), convertedSessionId, tokenId);
+
+        String accessToken = generateAccessTokenFrom(tokenClaims);
+        String refreshToken = generateRefreshTokenFrom(tokenClaims);
+        Instant createdAt = stampTime();
+
+        return sessionRepository.insert(new SessionEntity(
+                user.getId(),
+                sessionId.getSessionKey(),
+                createdAt,
+                user.getRoles().stream().map(RoleEntity::getDesignation).collect(Collectors.toSet()),
+                accessToken,
+                refreshToken,
+                tokenId
+        ));
     }
 
     private UserEntity findUserByIdentifier(String identifier) {

@@ -16,11 +16,10 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
     private final String keyspaceName;
     private final SchemaAction schemaAction;
 
-    public CassandraConfig(
-            @Value("${spring.cassandra.contact-points}") String contactPoints,
-            @Value("${spring.cassandra.keyspace-name}") String keyspaceName,
-            @Value("${spring.cassandra.schema-action}") SchemaAction schemaAction
-    ) {
+    public CassandraConfig(@Value("${spring.cassandra.contact-points}") String contactPoints,
+                           @Value("${spring.cassandra.keyspace-name}") String keyspaceName,
+                           @Value("${spring.cassandra.schema-action}") SchemaAction schemaAction) {
+
         this.contactPoints = contactPoints;
         this.keyspaceName = keyspaceName;
         this.schemaAction = schemaAction;
@@ -51,7 +50,8 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
                 CreateKeyspaceSpecification
                         .createKeyspace(keyspaceName)
                         .ifNotExists()
-                        .with(KeyspaceOption.DURABLE_WRITES, true)
+                        .with(KeyspaceOption.DURABLE_WRITES)
+                        .withSimpleReplication()
         );
     }
 }
