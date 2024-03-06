@@ -9,6 +9,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.data.cassandra.core.cql.Ordering.DESCENDING;
 import static org.springframework.data.cassandra.core.cql.PrimaryKeyType.CLUSTERED;
@@ -20,7 +21,7 @@ import static org.springframework.data.cassandra.core.mapping.CassandraType.Name
 @Table("sessions")
 public class SessionEntity implements Serializable {
     @PrimaryKeyColumn(name = "user_id", type = PARTITIONED)
-    private Long userID;
+    private Long userId;
 
     @PrimaryKeyColumn(name = "session_key", type = CLUSTERED, ordinal = 0)
     private String sessionKey;
@@ -35,7 +36,7 @@ public class SessionEntity implements Serializable {
 
     @Column
     @CassandraType(typeArguments = TEXT, type = LIST)
-    private Set<Role> roles;
+    private Set<String> roles;
 
     @Column("access_token")
     private String accessToken;
@@ -44,34 +45,34 @@ public class SessionEntity implements Serializable {
     private String refreshToken;
 
     @Column("token_id")
-    private String tokenID;
+    private String tokenId;
 
     protected SessionEntity() {}
 
-    public SessionEntity(Long userID,
+    public SessionEntity(Long userId,
                          String sessionKey,
                          Instant createdAt,
                          Set<Role> roles,
                          String accessToken,
                          String refreshToken,
-                         String tokenID) {
+                         String tokenId) {
 
-        this.userID = userID;
+        this.userId = userId;
         this.sessionKey = sessionKey;
         this.refreshedAt = createdAt;
         this.createdAt = createdAt;
-        this.roles = roles;
+        this.roles = roles.stream().map(Role::name).collect(Collectors.toSet());
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        this.tokenID = tokenID;
+        this.tokenId = tokenId;
     }
 
-    public Long getUserID() {
-        return userID;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getSessionKey() {
@@ -83,11 +84,11 @@ public class SessionEntity implements Serializable {
     }
 
     public Set<Role> getRoles() {
-        return roles;
+        return roles.stream().map(Role::valueOf).collect(Collectors.toSet());
     }
 
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.roles = roles.stream().map(Role::name).collect(Collectors.toSet());
     }
 
     public String getAccessToken() {
@@ -114,12 +115,12 @@ public class SessionEntity implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public String getTokenID() {
-        return tokenID;
+    public String getTokenId() {
+        return tokenId;
     }
 
-    public void setTokenID(String tokenID) {
-        this.tokenID = tokenID;
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
     }
 
     public Instant getRefreshedAt() {
@@ -132,14 +133,14 @@ public class SessionEntity implements Serializable {
 
     @Override
     public int hashCode() {
-        return  userID.hashCode() *
+        return  userId.hashCode() *
                 sessionKey.hashCode() *
                 createdAt.hashCode() *
                 refreshedAt.hashCode() *
                 roles.hashCode() *
                 accessToken.hashCode() *
                 refreshToken.hashCode() *
-                tokenID.hashCode();
+                tokenId.hashCode();
     }
 
     @Override
@@ -147,39 +148,15 @@ public class SessionEntity implements Serializable {
         if (this == obj) return true;
         if (! (obj instanceof SessionEntity sessionEntity)) return false;
 
-        return  userID.equals(sessionEntity.userID) &&
+        return  userId.equals(sessionEntity.userId) &&
                 sessionKey.equals(sessionEntity.sessionKey) &&
                 createdAt.equals(sessionEntity.createdAt) &&
                 refreshedAt.equals(sessionEntity.refreshedAt) &&
                 accessToken.equals(sessionEntity.accessToken) &&
                 refreshToken.equals(sessionEntity.refreshToken) &&
-                tokenID.equals(sessionEntity.tokenID) &&
+                tokenId.equals(sessionEntity.tokenId) &&
                 roles.size() == sessionEntity.roles.size() &&
                 roles.containsAll(sessionEntity.roles) &&
                 sessionEntity.roles.containsAll(roles);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "\n\tuserID: " + userID +
-                "\n\tsessionKey: " + sessionKey +
-                "\n\tcreatedAt: " + createdAt +
-                "\n\trefreshedAt: " + refreshedAt +
-                "\n\troles: " + roles +
-                "\n\taccessToken: " + accessToken +
-                "\n\trefreshToken: " + refreshToken +
-                "\n\ttokenID: " + tokenID +
-                "\n}";
-    }
-
-    public boolean isTheSameAs(SessionEntity other) {
-        return  userID.equals(other.userID) &&
-                sessionKey.equals(other.sessionKey) &&
-                createdAt.equals(other.createdAt);
-    }
-
-    public boolean isNewerThen(SessionEntity other) {
-        return refreshedAt.isAfter(other.refreshedAt);
     }
 }

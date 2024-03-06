@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(UserSearchCriteria criteria) {
-        super("user with params not found. Params: " + new HashMap<>() {{
+        super("User with params not found. Params: " + new HashMap<>() {{
             if (criteria.name().isPresent())
                 put("name", criteria.name().get());
 
@@ -28,5 +28,9 @@ public class UserNotFoundException extends RuntimeException {
             if (criteria.pageNumber().isPresent())
                 put("pageNumber", criteria.pageNumber().get());
         }});
+    }
+
+    public UserNotFoundException(String identifier) {
+        super("User with identifier " + identifier + " not found");
     }
 }

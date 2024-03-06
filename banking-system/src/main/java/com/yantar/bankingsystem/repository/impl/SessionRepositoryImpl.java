@@ -29,12 +29,12 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public Optional<SessionEntity> findByID(SessionId sessionID) {
+    public Optional<SessionEntity> findById(SessionId sessionID) {
         return findByID(sessionID.getUserId(), sessionID.getSessionKey());
     }
 
     @Override
-    public List<SessionEntity> findAllByUserID(Long userID) {
+    public List<SessionEntity> findAllByUserId(Long userID) {
         return operations.select(query(where("user_id").is(userID)), SessionEntity.class);
     }
 
@@ -44,7 +44,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public boolean deleteByID(SessionId sessionId) {
+    public boolean deleteById(SessionId sessionId) {
         return operations.delete(query(List.of(
                 where("user_id").is(sessionId.getUserId()),
                 where("session_key").is(sessionId.getSessionKey())
@@ -52,12 +52,12 @@ public class SessionRepositoryImpl implements SessionRepository {
     }
 
     @Override
-    public boolean deleteAllByUserID(Long userId) {
+    public boolean deleteAllByUserId(Long userId) {
         return operations.delete(query(where("user_id").is(userId)), SessionEntity.class);
     }
 
     @Override
-    public boolean existsByUserID(Long userID) {
+    public boolean existsByUserId(Long userID) {
         return operations.exists(query(where("user_id").is(userID)), SessionEntity.class);
     }
 

@@ -102,9 +102,9 @@ public class TokenUtilImpl implements TokenUtil {
                 .signWith(Keys.hmacShaKeyFor(BASE64.decode(config.getSecretKey())), HS256)
                 .setIssuer(config.getIssuer())
                 .setExpiration(Date.from(Instant.now(clock).plusMillis(config.getExpirationMs())))
-                .setId(claims.getTokenID())
-                .setSubject(claims.getSubjectID().toString())
-                .claim("sid", claims.getSessionID())
+                .setId(claims.getTokenId())
+                .setSubject(claims.getSubjectId().toString())
+                .claim("sid", claims.getSessionId())
                 .compact();
     }
 

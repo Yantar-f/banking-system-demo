@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SessionRepository {
-    Optional<SessionEntity> findByID            (SessionId sessionId);
-    List<SessionEntity>     findAllByUserID     (Long userId);
-    boolean                 existsByUserID      (Long userId);
+    Optional<SessionEntity> findById            (SessionId sessionId);
+    List<SessionEntity>     findAllByUserId     (Long userId);
+    boolean                 existsByUserId      (Long userId);
 
     SessionEntity   insert              (SessionEntity session);
-    boolean         deleteByID          (SessionId sessionId);
-    boolean         deleteAllByUserID   (Long userId);
+    boolean         deleteById          (SessionId sessionId);
+    boolean         deleteAllByUserId   (Long userId);
 }

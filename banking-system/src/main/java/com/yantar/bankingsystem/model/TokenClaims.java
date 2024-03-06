@@ -1,46 +1,46 @@
 package com.yantar.bankingsystem.model;
 
 public class TokenClaims {
-    private Long subjectID;
-    private String sessionID;
-    private String tokenID;
+    private Long subjectId;
+    private String sessionId;
+    private String tokenId;
 
-    public TokenClaims(Long subjectID,
-                       String sessionID,
-                       String tokenID) {
+    public TokenClaims(Long subjectId,
+                       String sessionId,
+                       String tokenId) {
 
-        this.subjectID = subjectID;
-        this.sessionID = sessionID;
-        this.tokenID = tokenID;
+        this.subjectId = subjectId;
+        this.sessionId = sessionId;
+        this.tokenId = tokenId;
     }
 
-    public Long getSubjectID() {
-        return subjectID;
+    public Long getSubjectId() {
+        return subjectId;
     }
 
-    public void setSubjectID(Long subjectID) {
-        this.subjectID = subjectID;
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public String getSessionId() {
+        return sessionId;
     }
 
-    public void setSessionID(String sessionID) {
-        this.sessionID = sessionID;
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
-    public String getTokenID() {
-        return tokenID;
+    public String getTokenId() {
+        return tokenId;
     }
 
-    public void setTokenID(String tokenID) {
-        this.tokenID = tokenID;
+    public void setTokenId(String tokenId) {
+        this.tokenId = tokenId;
     }
 
     @Override
     public int hashCode() {
-        return subjectID.hashCode() * sessionID.hashCode() * tokenID.hashCode();
+        return subjectId.hashCode() * sessionId.hashCode() * tokenId.hashCode();
     }
 
     @Override
@@ -50,8 +50,8 @@ public class TokenClaims {
 
         TokenClaims tokenClaims = (TokenClaims) obj;
 
-        return  subjectID.equals(tokenClaims.subjectID) &&
-                sessionID.equals(tokenClaims.sessionID) &&
-                tokenID.equals(tokenClaims.tokenID);
+        return  subjectId.equals(tokenClaims.subjectId) &&
+                sessionId.equals(tokenClaims.sessionId) &&
+                tokenId.equals(tokenClaims.tokenId);
     }
 }

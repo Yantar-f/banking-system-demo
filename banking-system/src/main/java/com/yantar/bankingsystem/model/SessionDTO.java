@@ -10,6 +10,6 @@ public record SessionDTO(
         Set<Role> roles
 ) {
     public SessionDTO(SessionEntity session) {
-        this(session.getUserID(), session.getRoles());
+        this(session.getUserId(), session.getRoles());
     }
 }
