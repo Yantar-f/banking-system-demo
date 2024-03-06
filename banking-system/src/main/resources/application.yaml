@@ -34,6 +34,8 @@ spring:
         schema-action: create_if_not_exists
 app:
     security:
+        session:
+            session-key-length: 7
         access-token:
             issuer: demo-iss
             activation-ms: 0
