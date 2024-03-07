@@ -2,6 +2,7 @@ package com.yantar.bankingsystem.controller;
 
 import com.yantar.bankingsystem.entity.UserEntity;
 import com.yantar.bankingsystem.model.UserCreationData;
+import com.yantar.bankingsystem.model.UserDTO;
 import com.yantar.bankingsystem.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class AdminController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<UserEntity> createUser(@RequestBody @Valid UserCreationData creationData) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody @Valid UserCreationData creationData) {
         UserEntity user = userService.createUser(creationData);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(new UserDTO(user));
     }
 }

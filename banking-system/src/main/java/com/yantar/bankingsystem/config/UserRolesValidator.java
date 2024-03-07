@@ -7,10 +7,12 @@ import java.util.HashSet;
 import java.util.List;
 
 public class UserRolesValidator implements ConstraintValidator<UserRoles, String[]>{
-    private static final HashSet<String> ROLES_SET = new HashSet<>() {{
+    private static final HashSet<String> ROLES_SET = new HashSet<>();
+
+    static {
         for (var role : Role.values())
             ROLES_SET.add(role.name());
-    }};
+    }
 
     @Override
     public boolean isValid(String[] roles, ConstraintValidatorContext context) {

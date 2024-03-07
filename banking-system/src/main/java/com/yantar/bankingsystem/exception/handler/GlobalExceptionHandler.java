@@ -144,7 +144,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return generateErrorResponse(
                 BAD_REQUEST,
                 extractURI(request),
-                "Argument nor valid",
+                "Argument not valid",
                 errorMessage
         );
     }
