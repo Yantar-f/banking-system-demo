@@ -26,11 +26,11 @@ public class SessionEntity implements Serializable {
     @PrimaryKeyColumn(name = "session_key", type = CLUSTERED, ordinal = 0)
     private String sessionKey;
 
-    @PrimaryKeyColumn(name = "created_at", type = CLUSTERED, ordering = DESCENDING, ordinal = 1)
+    @PrimaryKeyColumn(name = "refreshed_at", type = CLUSTERED, ordering = DESCENDING, ordinal = 1)
     @CassandraType(type = TIMESTAMP)
     private Instant refreshedAt;
 
-    @Column("createdAt")
+    @Column("created_at")
     @CassandraType(type = TIMESTAMP)
     private Instant createdAt;
 

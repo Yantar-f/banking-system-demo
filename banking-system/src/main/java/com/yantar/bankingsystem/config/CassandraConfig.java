@@ -45,6 +45,12 @@ public class CassandraConfig extends AbstractCassandraConfiguration {
 
     @NonNull
     @Override
+    public String[] getEntityBasePackages() {
+        return new String[]{"com.yantar"};
+    }
+
+    @NonNull
+    @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
         return List.of(
                 CreateKeyspaceSpecification

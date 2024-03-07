@@ -61,10 +61,10 @@ public class SessionRepositoryImpl implements SessionRepository {
         return operations.exists(query(where("user_id").is(userID)), SessionEntity.class);
     }
 
-    private Optional<SessionEntity> findByID(Long userId, String sessionID) {
+    private Optional<SessionEntity> findByID(Long userId, String sessionKey) {
         return Optional.ofNullable(operations.selectOne(query(List.of(
                 where("user_id").is(userId),
-                where("session_key").is(sessionID)
+                where("session_key").is(sessionKey)
         )).limit(1), SessionEntity.class));
     }
 }
